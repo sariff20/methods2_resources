@@ -3,6 +3,7 @@ observations
 
 hist(observations)
 
+#coding two ways the probability density
 x <- seq(-5, 5, length.out = 100)
 sigma <- 3
 mu <- 0
@@ -20,3 +21,8 @@ tau3 <- plot(f2)
 par(mfrow = c(1, 2))
 plot(f1)
 plot(f2)
+
+#simulation
+values <- rnorm(10000,7,sqrt(1/2))
+count <- sum(values > 8.4)
+count/10000
