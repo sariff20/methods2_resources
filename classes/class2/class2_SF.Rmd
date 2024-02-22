@@ -30,8 +30,10 @@ Loops can be good for simulating. And they are cool. Let's practice is a bit.
 
 ## Exercises to practise loops (discuss with partner/group if you want to)
 ### Ex. A: What is the difference between a for- and a while loop? Explain in your own words in 1-2 sentences.
+*while -> goes until something happens, for -> does somehting to all the elements*
 
 ### Ex. B: When would you use for-loops and when would you use while-loops? Explain in your own words in 1-2 sentences
+*for when i want to do something to all the elements, while, when i want to do it until something specific*
 
 ### Ex. C: Create and run both a simple for and a while loop
 I've made an example below. Make your own example below it. If you have no ideas for what to code in your for loop, here's an example you can try to code up:
@@ -43,6 +45,12 @@ for (i in 1:10){ # For each i in 1:10...
 }
 
 # your simple loop here
+for (i in 1:20) {
+  if (i > 3){
+    print(i)
+  }
+}
+
 ```
 
 I've also made an example of a while loop below. Make your own example below it. If you have no ideas for what to code in your while loop, here's an example you can try to code up:
@@ -56,6 +64,13 @@ while (number < 10){ # While the number is below 10, do the following
 }
 
 # your simple while-loop here
+some_number = 0
+while(some_number < 20){
+  print("I'm still below 20, so I run!")
+  print(some_number)
+  some_number = some_number + 0.5
+}
+
 ```
 
 ## Exercises to practise functions and if-else statements
@@ -63,15 +78,14 @@ while (number < 10){ # While the number is below 10, do the following
 Create a function that accepts a temperature in Fahrenheit and returns the temperature converted to Celsius. The formula to convert Fahrenheit to Celsius is: C = (F-32)*5/9.
 ```{r}
 # Function to convert Fahrenheit to Celsius
-convert_to_celsius <- function(fahrenheit) {
-  # Your code here
-  # Hint: Apply the conversion formula within the function
+
+fahrenheit_function <- function(fah){
+  cel <- (fah - 32) * 5 / 9
+  return(cel)
 }
 
-# Example of how the final function (when you've written it) should be used:
-# temp_celsius <- convert_to_celsius(68)
-# print(temp_celsius)
-# Expected Output (for fahrenheit = 68): 20
+fahrenheit_function(350)
+
 ```
 
 ### Ex. E: Write a function in R that provides clothing advice based on the temperature:
@@ -86,15 +100,19 @@ If the temperature is below 15 degrees, suggest wearing a warm coat.
 Use statements if, else if, and else. Google how to set up the syntax with curly brackets and so on if you're not sure.
 ```{r}
 # Function to give clothing advice based on temperature
-clothing_advice <- function(temperature) {
-  # Your code here
-  # Hint: Use if-else statements to check the temperature and return the advice
+clothing_function <- function(temp){
+  if(temp > 25){
+    print("wear a T-shirt")
+  }
+  if(15 <= temp & temp<= 25){
+    print("wear a light jacket")
+  }
+  if(temp<15){
+    print("wear a warm coat")
+  }
 }
 
-# Example of how the final function (when you've written it) should be used:
-# advice <- clothing_advice(20)
-# print(advice)
-# Expected Output (for temperature = 20): "Wear a light jacket."
+clothing_function(26)
 
 ```
 
