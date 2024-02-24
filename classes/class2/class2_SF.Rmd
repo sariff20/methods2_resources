@@ -120,6 +120,56 @@ clothing_function(26)
 
 ## Ex. 0: Write up / copy the code found on page 69-70 in chapter 5 ROS and note whats going on at each step. The book explains it - so just go through it and discuss with your group to understand whats going on.
 
+```{r}
+
+n_girls <- rbinom(1,400,0.488)
+print(n_girls)
+n_sims <- 1000
+n_girls <- rep(NA, n_sims)
+for(s in 1:n_sims){
+  n_girls[s] <- rbinom(1,400,0.488)
+}
+hist(n_girls)
+
+birth_type <- sample(c("fraternal twin", "identical twin", "single birth"),
+                     size = 400, replace = TRUE, prob=c(1/125,1/300,1-1/125-1/300))
+girls <- rep(NA,400)
+for(i in 1:400){
+  if (birth_type[i] == "single birth"){
+    girls[i] <- rbinom(1,1,0.448)
+  }
+  else if (birth_type[i]=="identical twin"){
+    girls[i] <- 2*rbinom(1,1,0.495)
+  }
+  else if (birth_type[i] == "fraternal twin"){
+    girls[i] <- rbinom(1,2,0.495)
+  }
+}
+n_girls <- sum(girls)
+n_sims <- 1000
+n_girls <- rep(NA, n_sims)
+for(s in 1:n_sims){
+  birth_type <- sample(c("fraternal twin", "identical twin", "single birth"),
+                       size = 400, replace = TRUE, prob=c(1/125,1/300,1-1/125-1/300))
+  girls <- rep(NA,400)
+  for(i in 1:400){
+    if (birth_type[i] == "single birth"){
+      girls[i] <- rbinom(1,1,0.448)
+    }
+    else if (birth_type[i]=="identical twin"){
+      girls[i] <- 2*rbinom(1,1,0.495)
+    }
+    else if (birth_type[i] == "fraternal twin"){
+      girls[i] <- rbinom(1,2,0.495)
+    }
+  }
+  n_girls[s] <- sum(girls)
+}
+hist(n_girls)
+
+```
+
+
 ### Ex. 5.1 Discrete probability simulation: Suppose that a basketball player has a 60% chance of making a shot, and he keeps taking shots until he misses two in a row. Also assume his shots are independent (so that each shot has 60% probability of success, no matter what happened before).
 * Hint 3 and 4
 
@@ -139,20 +189,46 @@ We need to record:
 
 Let's try and write a function:
 ```{r}
+
 # Function to simulate basketball player
-basketball <- function(){ # starting the function for you
-  
-  # your code here
-  
+basketball <- function() {
+  miss <- 0
+  hits <- 0
+  shots <- 0
+  while (miss < 2) {
+    shot <- rbinom(1, 1, 0.6)
+    shots <- shots + 1
+    if (shot == 1) {
+      hits <- hits + 1
+      miss <- 0
+    }
+    else{
+      miss <- miss + 1
+    }
+  }
+  success_rate <- hits/shots
+  return(shots)
 }
+
 # Example usage of the function, when done
-# basket_sim <- basketball(printing = TRUE)
+
+basket_sim <- basketball()
 
 ```
 
 #### Ex. 5.1.b) Put the R function in a loop to simulate the process 1000 times. Use the simulation to estimate the mean and standard deviation of the total number of shots that the player will take, and plot a histogram representing the distribution of this random variable. 
 ```{r}
-# your code here
+
+n_sims <- 1000
+n_shots <- rep(NA,n_sims)
+for(i in 1:n_sims){
+  n_shots[i] <- basketball()
+}
+
+mean(n_shots)
+sd(n_shots)
+hist(n_shots)
+
 ```
 
 #### Ex. 5.1.c) Using your simulations, make a scatterplot of the number of shots the player will take and the proportion of shots that are successes.
