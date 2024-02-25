@@ -206,8 +206,26 @@ basketball <- function() {
       miss <- miss + 1
     }
   }
-  success_rate <- hits/shots
   return(shots)
+}
+
+basketball2 <- function() {
+  miss <- 0
+  hits <- 0
+  shots <- 0
+  while (miss < 2) {
+    shot <- rbinom(1, 1, 0.6)
+    shots <- shots + 1
+    if (shot == 1) {
+      hits <- hits + 1
+      miss <- 0
+    }
+    else{
+      miss <- miss + 1
+    }
+  }
+  success_rate <- hits / shots
+  (list(shots = shots, success_rate = success_rate))
 }
 
 # Example usage of the function, when done
@@ -233,32 +251,87 @@ hist(n_shots)
 
 #### Ex. 5.1.c) Using your simulations, make a scatterplot of the number of shots the player will take and the proportion of shots that are successes.
 ```{r}
-# your code here
+
+#still not good
+
+n_sims <- 1000
+n_shots <- rep(NA,n_sims)
+n_success <- rep(NA,n_sims)
+results <- basketball2()
+for(i in 1:n_sims){
+  n_shots[i] <- results[[1]]
+}
+for(i in i:n_sims){
+  n_success[i] <- results[[2]]
+}
+
+# Extract the number of shots and proportion of successes
+shots_taken <- sapply(results, function(x) x$shots)
+proportion_success <- sapply(results, function(x) x$proportion_success)
+
 ```
 
 ### Ex. 5.3: Binomial distribution: A player takes 10 basketball shots, with a 40% probability of making each shot. Assume the outcomes of the shots are independent.
 #### Ex. 5.3.a) Write a line of R code to compute the probability that the player makes exactly 3 of the 10 shots.
 ```{r}
-# your code here
+
+dbinom(3, size = 10, prob = 0.4)
+
+((10*9*8)/(3*2*1))*(0.4^3)*(0.6^7)
+
 ```
 
 #### Ex. 5.3.b) Write an R function to simulate the 10 shots. Loop this function 10 000 times and check that your simulated probability of making exactly 3 shots is close to the exact probability computed in (a).
 ```{r}
-# your code here
+
+basketball3 <- function() {
+  shots <- rbinom(10, 1, 0.4)
+  success <- sum(shots)
+  return(success)
+}
+
+n_sims <- 10000
+n_shots <- rep(NA,n_sims)
+for(i in 1:n_sims){
+  n_shots[i] <- basketball3()
+}
+
+hist(n_shots)
+
+mean(n_shots == 3)
+
 ```
 
 ## Ex. 5.4: Demonstration of the Central Limit Theorem: Let x = x1 + · · · + x20, the sum of 20 independent uniform(0, 1) random variables. In R, create 1000 simulations of x and plot their histogram. What is the normal approximation to this distribution provided by the Central Limit Theorem? Overlay a graph of the normal density on top of the histogram. Comment on any differences between the histogram and the curve.
 
 (Recall the Central limit theorem (CLT) on the bottom of page 51 and from Methods 1)
 ```{r}
-# your code here
+
+n_sim <- 1000
+simulation <- replicate(n_sim, sum(runif(20)))
+hist(simulation, breaks = 20, freq = FALSE)
+mu <- 20 * 0.5
+sigma <- sqrt(20 * (1 / 12))
+curve(dnorm(x, mean = mu, sd = sigma), add = TRUE)
+
 ```
 
 ## Ex. 5.5: Distribution of averages and differences: The heights of men in the United States are approximately normally distributed with mean 69.1 inches and standard deviation 2.9 inches. The heights of women are approximately normally distributed with mean 63.7 inches and standard deviation 2.7 inches. Let x be the average height of 100 randomly sampled men, and y be the average height of 100 randomly sampled women. In R, create 1000 simulations of x − y and plot their histogram. Using the simulations, compute the mean and standard deviation of the distribution of x − y and compare to their exact values.
 *Hint 1
 
 ```{r}
-# your code here
+
+difference <- replicate(1000, {
+  sample_men <- rnorm(100, 69.7, 2.9)
+  sample_women <- rnorm(100, 63.7, 2.7)
+  mean(sample_men) - mean(sample_women)
+})
+
+hist(difference)
+
+mean(difference)
+sd(difference)
+
 ```
 
 ## Ex. 5.8: Coverage of confidence intervals: On page 15 there is a discussion of an experimental study of an education-related intervention in Jamaica, in which the point estimate of the treatment effect, on the log scale, was 0.35 with a standard error of 0.17. Suppose the true effect is 0.10 — this seems more realistic than the point estimate of 0.35 — so that the treatment on average would increase earnings by 0.10 on the log scale. Use simulation to study the statistical properties of this experiment, assuming the standard error is 0.17.
