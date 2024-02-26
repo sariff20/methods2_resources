@@ -56,7 +56,7 @@ hist(y2,breaks=seq(0,max(y2)+5,5),
 hist(y3,breaks=seq(-0.5,20.5,1),
      main="binomial distribuation with 20 tries, probability 0.6")
 hist(y4,breaks=seq(-0.5,max(y4)+1,1),
-     main="possion distribution with mean 5")
+     main="poisson distribution with mean 5")
 
 male <- rbinom(1,1,0.48)
 height <- ifelse(male==1,rnorm(1,69.1,2.9),rnorm(1,63.7,2.7))
@@ -87,7 +87,7 @@ height_sim <- function(N){
 avg_height <- replicate(1000,height_sim(N=10))
 hist(avg_height)
 
-#demonstrating meadian absoluta deviation
+#demonstrating meadian absolut deviation
 z <- rnorm(1e4,5,2)
 cat("mean=", mean(z), ", median=", median(z), ", sd=", sd(z), ", mad sd= ", mad(z))
 
@@ -99,7 +99,7 @@ male <- earnings$male
 ratio <- median(earn[male==0]) / median(earn[male==1])
 print(ratio)
 
-#bootsrappiing
+#bootsrapping
 boot_ratio <- function(data){
   n <- nrow(data)
   boot <- sample(n,replace=TRUE)
