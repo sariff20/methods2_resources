@@ -201,8 +201,7 @@ basketball <- function() {
     if (shot == 1) {
       hits <- hits + 1
       miss <- 0
-    }
-    else{
+    } else{
       miss <- miss + 1
     }
   }
@@ -219,13 +218,11 @@ basketball2 <- function() {
     if (shot == 1) {
       hits <- hits + 1
       miss <- 0
-    }
-    else{
+    } else{
       miss <- miss + 1
     }
   }
-  success_rate <- hits / shots
-  (list(shots = shots, success_rate = success_rate))
+  (list(shots = shots, hits = hits))
 }
 
 # Example usage of the function, when done
@@ -252,22 +249,18 @@ hist(n_shots)
 #### Ex. 5.1.c) Using your simulations, make a scatterplot of the number of shots the player will take and the proportion of shots that are successes.
 ```{r}
 
-#still not good
-
 n_sims <- 1000
 n_shots <- rep(NA,n_sims)
 n_success <- rep(NA,n_sims)
-results <- basketball2()
+
 for(i in 1:n_sims){
-  n_shots[i] <- results[[1]]
-}
-for(i in i:n_sims){
-  n_success[i] <- results[[2]]
+  result <- basketball2()
+  n_shots[i] <- result[[1]]
+  n_success[i] <- result[[2]]
 }
 
 # Extract the number of shots and proportion of successes
-shots_taken <- sapply(results, function(x) x$shots)
-proportion_success <- sapply(results, function(x) x$proportion_success)
+plot(n_shots,n_success/n_shots)
 
 ```
 
@@ -322,7 +315,7 @@ curve(dnorm(x, mean = mu, sd = sigma), add = TRUE)
 ```{r}
 
 difference <- replicate(1000, {
-  sample_men <- rnorm(100, 69.7, 2.9)
+  sample_men <- rnorm(100, 69.1, 2.9)
   sample_women <- rnorm(100, 63.7, 2.7)
   mean(sample_men) - mean(sample_women)
 })
@@ -332,24 +325,49 @@ hist(difference)
 mean(difference)
 sd(difference)
 
+exact_mean <- 69.1-63.7
+exact_mean
+
 ```
 
 ## Ex. 5.8: Coverage of confidence intervals: On page 15 there is a discussion of an experimental study of an education-related intervention in Jamaica, in which the point estimate of the treatment effect, on the log scale, was 0.35 with a standard error of 0.17. Suppose the true effect is 0.10 — this seems more realistic than the point estimate of 0.35 — so that the treatment on average would increase earnings by 0.10 on the log scale. Use simulation to study the statistical properties of this experiment, assuming the standard error is 0.17.
 *Hint 2
 
-```{r}
-# your code here
-```
-
 #### Ex. 5.8.a) Simulate 1000 independent replications of the experiment assuming that the point estimate is normally distributed with mean 0.10 and standard deviation 0.17.
 (In the experiment on page 15, we see n = 127 children)
 ```{r}
-# your code here
+
+#variables
+n_sims <- 1000
+n_children <- 127
+log_mean <- 0.10
+log_sd <- 0.17
+
+n_sims <- 1000
+
+sim_values <- rep(NA,n_sims)
+
+for (i in 1:n_sims){
+  sim_values <- rlnorm(n_children, log_mean, log_sd)
+}
+
 ```
 
 #### Ex. 5.8.b) For each replication, compute the 95% confidence interval. Check how many of these intervals include the true parameter value.
 ```{r}
-# your code here
+
+include_value <- 0
+
+for (i in 1:n_sims) {
+  sim_values[i] <- mean(rnorm(127, mean, sd))
+  lower_bound <- sim_values[i] - 1.96 * se
+  upper_bound <- sim_values[i] + 1.96 * se
+  if ((lower_bound <= treatment_effect_est &
+       upper_bound >= treatment_effect_est)) {
+    include_value <- include_value + 1
+  }
+}
+
 ```
 
 #### Ex. 5.9: Coverage of confidence intervals after selection on statistical significance: Take your 1000 simulations from Exercise 5.8, and select just the ones where the estimate is statistically significantly different from zero. Compute the average and standard deviation of the selected point estimates. Compare these to the result from Exercise 5.8.
