@@ -278,6 +278,15 @@ A loaded (or biased) die is one where the probabilities of landing on each numbe
 
 ```{r}
 
+rolls <- c(1,2,3,4,5,6)
+probs_rolls <- c(0.05,0.10,0.35,0.25,0.15,0.10)
+
+rolled_numbers <- sample(rolls,10000,replace=TRUE,probs_rolls)
+
+hist(rolled_numbers)
+mean(rolled_numbers)
+sd(rolled_numbers)
+
 ```
 
 ### E6 Sampling from a continuous distribution - generating heights
@@ -285,12 +294,27 @@ Assume that the heights of individuals in a population are normally distributed 
 
 ```{r}
 
+height_mean <- 170
+heigh_sd <- 10
+
+n_sims <- 1000
+
+stim_heights <- rnorm(n_sims,170,10)
+
+hist(stim_heights)
+mean(stim_heights)
+sd(stim_heights)
+
 ```
 
 ### E7 Simulating coin flips - Bernoulli Distribution
 (this is something we work with on the master's hehe)
 Simulate flipping a fair coin 5,000 times, where the outcome of each flip is either "Heads" or "Tails" with equal probability. Calculate and print the proportion of flips that result in Heads. This exercise demonstrates sampling from a Bernoulli distribution, which is a simple case of a discrete distribution.
 ```{r}
+
+flips <- rbinom(5000,1,0.5)
+
+sum(flips)/5000
 
 ```
 
@@ -302,12 +326,33 @@ A note: The task is to draw/plot some probability distributions for the normal d
 The point of this task is thus for you to see what happens when you vary the mean/standard deviation and nothing else in a distribution.
 ```{r}
 
+plot1 <- density(rnorm(1000,0,1))
+plot2 <- density(rnorm(1000,7,1))
+plot3 <- density(rnorm(1000,-1,1))
+plot4 <- density(rnorm(1000,0,0.3))
+plot5 <- density(rnorm(1000,0,1.5))
+plot6 <- density(rnorm(1000,0,2))
+
+plot(plot1)
+lines(plot2)
+lines(plot3)
+lines(plot4)
+lines(plot5)
+lines(plot6)
+
 ```
 
 #### Ex. 3.4 Probability distributions: Using a bar plot in R, graph the Poisson distribution with parameter 3.5.
 (Remember when the book says 'graph' it means simulate some data as per instructions and make a plot)
 
 ```{r}
+
+sim_poisson <- rep(NA,15)
+for (i in 1:15) {
+  sim_poisson[i] <- dpois(i-1,3.5)
+}
+
+barplot(sim_poisson)
 
 ```
 
